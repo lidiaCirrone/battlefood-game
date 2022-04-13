@@ -4,7 +4,7 @@ import './Score.css';
 const Score = (props) => {
    return (
       <div className={'score_label'}>
-         {props.user}
+         <p>{props.name} - {props.score}</p>
       </div>
    )
 }

@@ -3,10 +3,12 @@ import React from 'react'
 
 const UiButton = (props) => {
 
-
-    return(
+    const click = () => {
+        props.callback()
+    }
+    return (
         <>
-            <button type={props.type} value={props.value} />
+            <button type={props.type} onClick={click}>{props.label}</button>
         </>
     )
 }

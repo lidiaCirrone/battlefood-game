@@ -1,5 +1,6 @@
 .play_board {
-  margin: 20px auto 30px auto;
+  margin: 0 auto 30px auto;
+  border-radius: 15px;
   background-color: #4d5a5a34;
   width: 90%;
   height: 75vh;

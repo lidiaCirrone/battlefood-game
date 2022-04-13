@@ -8,11 +8,6 @@ import Score from '../score/Score';
 
 const MatchBoard = (props) => {
 
-   let computer = 'computer';
-   let computerIcon = 'pancakes';
-   let player = 'player';
-   let playerIcon = 'paella';
-
 
    return (
       <div className='play_board'>
@@ -24,8 +19,11 @@ const MatchBoard = (props) => {
             justifyContent: 'center',
             alignItems: 'center'
          }}>
-            <UiGameIcon icon={require(`../../../assets/icons/${computerIcon}.png`)} size={100} circleSize={180} />
-            <Score user={computer} />
+            {
+               !props.computerIcon ? <UiGameIcon icon={require(`../../../assets/icons/pancakes.png`)} size={100} circleSize={180} />
+                  : <UiGameIcon icon={require(`../../../assets/icons/${props.computerIcon}.png`)} size={100} circleSize={180} />
+            }
+            <Score score={props.computerScore} name={'Computer'} />
          </div>
 
          <hr style={{
@@ -40,8 +38,11 @@ const MatchBoard = (props) => {
             justifyContent: 'center',
             alignItems: 'center'
          }}>
-            <Score user={player} />
-            <UiGameIcon icon={require(`../../../assets/icons/${playerIcon}.png`)} size={100} circleSize={180} />
+            <Score score={props.playerScore} name={'Player'} />
+            {
+               !props.computerIcon ? <UiGameIcon icon={require(`../../../assets/icons/pancakes.png`)} size={100} circleSize={180} />
+                  : <UiGameIcon icon={require(`../../../assets/icons/${props.playerIcon}.png`)} size={100} circleSize={180} />
+            }
          </div>
 
       </div>

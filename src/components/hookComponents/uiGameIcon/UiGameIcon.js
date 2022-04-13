@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const UiGameIcon = ({ circleSize, icon, size, name, getIcon }) => {
+const UiGameIcon = ({ circleSize, icon, size, name, getIcon, modal }) => {
 
    const iconCallback = () => {
       getIcon(name);
@@ -16,7 +16,8 @@ const UiGameIcon = ({ circleSize, icon, size, name, getIcon }) => {
          height: circleSize,
          display: 'flex',
          justifyContent: 'center',
-         alignItems: 'center'
+         alignItems: 'center',
+         cursor: 'pointer'
       }}>
          <picture onClick={iconCallback}>
             <img src={icon} alt="Icon" style={{

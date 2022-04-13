@@ -16,9 +16,6 @@ function UiModal(props) {
                {props.title}
             </h1>
             {props.children}
-            <UiButton
-               label={'Close x'}
-            />
          </div>
       </div>
    )

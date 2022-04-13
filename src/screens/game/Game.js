@@ -15,29 +15,23 @@ class Game extends Component {
       this.state = {
          playerCount: 0,
          computerCount: 0,
-         playerIcon: '',
-         computerIcon: ''
+         winLose: false,
+         isOver: false
       }
 
-      this.foodObject = {
-         pancakes: '',
-         hamburger: '',
-         croissant: '',
-         paella: ''
-      }
-
+      this.players = [
+         { name: '', win: 0, lose: 0, }
+      ]
       this.game = {
          options: ['pancakes', 'hamburger', 'croissant', 'paella'],
          player: '',
          computer: 0,
          moves: 0,
          playerScore: 0,
-         computerScore: 0
+         computerScore: 0,
+         playerIcon: '',
+         computerIcon: ''
       }
-
-
-
-
    }
 
    componentDidMount() {
@@ -67,80 +61,61 @@ class Game extends Component {
       console.log('pc', this.game.computer);
    }
 
-   // ['pancakes', 'hamburger', 'croissant', 'paella'],
-   // ['sasso', 'carta', 'forbici', 'acqua'],
-
-   /* 
-
-   pancakes batte hamburger e croissant
-   hamburger batte croissant e paella
-   croissant batte paella e pancakes
-   paella batte pancakes e hamburger
-
-    */
-
-
    actionGame() {
+
+      let youWinLose;
+      let finallyGame;
 
       this.randomAction()
 
-      // player = myValue
       console.log('player', this.game.player);
 
       if (this.game.computer === this.game.player) {
-         alert('Pari');
       } else if (
-         (this.game.player === 'pancakes' && this.game.computer === 'hamburger') || 
-         (this.game.player === 'pancakes' && this.game.computer === 'croissant') || 
-         (this.game.player === 'hamburger' && this.game.computer === 'croissant') || 
+         (this.game.player === 'pancakes' && this.game.computer === 'hamburger') ||
+         (this.game.player === 'pancakes' && this.game.computer === 'croissant') ||
+         (this.game.player === 'hamburger' && this.game.computer === 'croissant') ||
          (this.game.player === 'hamburger' && this.game.computer === 'paella') ||
-         (this.game.player === 'croissant' && this.game.computer === 'paella') || 
-         (this.game.player === 'croissant' && this.game.computer === 'pancakes') || 
-         (this.game.player === 'paella' && this.game.computer === 'pancakes') ||  
-         (this.game.player === 'paella' && this.game.computer === 'hamburger') || 
+         (this.game.player === 'croissant' && this.game.computer === 'paella') ||
+         (this.game.player === 'croissant' && this.game.computer === 'pancakes') ||
+         (this.game.player === 'paella' && this.game.computer === 'pancakes') ||
+         (this.game.player === 'paella' && this.game.computer === 'hamburger') ||
          (this.game.player === 'pancakes' && this.game.computer === 'hamburger') ||
          (this.game.player === 'pancakes' && this.game.computer === 'croissant')) {
          ++this.game.playerScore;
-         alert(`pancakes batte hamburger e croissant
-         hamburger batte croissant e paella
-         croissant batte paella e pancakes
-         paella batte pancakes e hamburger.
-
-         Il tuo valore é ${this.game.player} e il valore del pc é ${this.game.computer}, piu un punto per te, adesso il conto é Player ${this.game.playerScore} : computer ${this.game.computerScore}`)
       } else {
          ++this.game.computerScore;
-         alert(`pancakes batte hamburger e croissant
-         hamburger batte croissant e paella
-         croissant batte paella e pancakes
-         paella batte pancakes e hamburger.
-
-         Il tuo valore é ${this.game.player} e il valore del pc é ${this.game.computer}, piu un punto per PC, adesso il conto é Player ${this.game.playerScore} : computer ${this.game.computerScore}`)
       }
 
-      if (this.game.playerScore == 2 || this.game.playerScore == 3) {
-         alert('Hai vinto')
-         this.game.playerScore = 0
-         this.game.computerScore = 0
-      } else if (this.game.computerScore == 2 || this.game.computerScore == 3) {
-         alert('Hai perso')
-         this.game.computerScore = 0
-         this.game.playerScore = 0
+      if (this.game.playerScore === 2 || this.game.playerScore === 3) {
+
+         youWinLose = true
+         finallyGame = true
+         // this.game.playerScore = 0
+         // this.game.computerScore = 0
+
+      } else if (this.game.computerScore === 2 || this.game.computerScore === 3) {
+
+         finallyGame = true
+         // this.game.computerScore = 0
+         // this.game.playerScore = 0
+
       }
+
+      this.setState({
+         ...this.state,
+         playerCount: this.game.playerScore,
+         computerCount: this.game.computerScore,
+         winLose: youWinLose,
+         isOver: finallyGame
+      })
    }
 
 
    clickHandler = (value) => {
-      console.log('value:', value);
-
-      this.game.player = value; //pancakes
+      this.game.playerIcon = value
+      this.game.player = value;
       this.actionGame();
-
-      this.setState({
-         playerCount: this.game.playerScore,
-         computerCount: this.game.computerScore,
-         playerIcon: '',
-         computerIcon: ''
-      })
    }
 
    componentWillUnmount() {
@@ -150,30 +125,48 @@ class Game extends Component {
 
    render() {
 
+      console.log(this.state.isOver)
+
       return (
          <>
             <UserBar />
-            <MatchBoard />
+            <MatchBoard
+               playerIcon={this.game.player}
+               computerIcon={this.game.computer}
+               playerScore={this.game.playerScore}
+               computerScore={this.game.computerScore}
+            />
             <IconBar getIcon={this.clickHandler} />
 
 
-            <UiModal
-               title={'Name'}>
-               <UiInput placeholder={'Name...'} />
-               <UiButton label={'Start'} />
-               {/* callback={startGame} */}
-            </UiModal>
+            {
+               this.state.isOver ? <UiModal title={''}>
+                  {
+                     this.state.winLose ? <p>Hai vinto</p> : <p>Hai perso</p>
+                  }
+                  <p>Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
+                  <p>Vuoi fare parte della clasifica? </p>
+                  <UiButton label={'Close'} callback={this.closeModal} />
+               </UiModal> : ''
+            }
 
-            <UiModal title={'Rules'}>
-               {/* regole */}
-            </UiModal>
-
-            <UiModal title={'Ranking'}>
-               {/* .map() dei dati che arrivano dallo storage */}
-            </UiModal>
          </>
       )
    }
+
+   closeModal = () => {
+
+      this.game.playerScore = 0
+      this.game.computerScore = 0
+
+      this.setState({
+         ...this.state,
+         isOver: false,
+         playerCount: 0,
+         computerCount: 0
+      })
+   }
+
 }
 
 export default Game
