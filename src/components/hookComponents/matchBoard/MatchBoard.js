@@ -5,6 +5,8 @@ import './MatchBoard.css'
 import UiGameIcon from '../uiGameIcon/UiGameIcon';
 import Score from '../score/Score';
 
+import {playerIcon, computerIcon}  from '../../../utils/utils';
+
 
 const MatchBoard = (props) => {
 
@@ -20,7 +22,7 @@ const MatchBoard = (props) => {
             alignItems: 'center'
          }}>
             {
-               !props.computerIcon ? <UiGameIcon icon={require(`../../../assets/icons/pancakes.png`)} size={100} circleSize={180} />
+               !props.computerIcon ? <UiGameIcon icon={computerIcon} size={100} circleSize={180} />
                   : <UiGameIcon icon={require(`../../../assets/icons/${props.computerIcon}.png`)} size={100} circleSize={180} />
             }
             <Score score={props.computerScore} name={'Computer'} />
@@ -40,7 +42,7 @@ const MatchBoard = (props) => {
          }}>
             <Score score={props.playerScore} name={'Player'} />
             {
-               !props.computerIcon ? <UiGameIcon icon={require(`../../../assets/icons/pancakes.png`)} size={100} circleSize={180} />
+               !props.playerIcon ? <UiGameIcon icon={playerIcon} size={100} circleSize={180} />
                   : <UiGameIcon icon={require(`../../../assets/icons/${props.playerIcon}.png`)} size={100} circleSize={180} />
             }
          </div>

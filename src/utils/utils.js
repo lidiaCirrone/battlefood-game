@@ -5,3 +5,6 @@ export const paellaIcon = require('../assets/icons/paella.png');
 
 export const rulesIcon = require('../assets/icons/rules.png');
 export const trophyIcon = require('../assets/icons/trophy.png');
+
+export const playerIcon = require('../assets/icons/player.png');
+export const computerIcon = require('../assets/icons/computer.png');

@@ -2,6 +2,11 @@ body {
    background: rgb(255,248,202,0.3);
 }
 
+body, button {
+   font-family: 'Paytone One', sans-serif;
+   font-size: 14px;
+}
+
 .App {
   text-align: center;
 }

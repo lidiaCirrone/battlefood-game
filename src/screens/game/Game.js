@@ -16,7 +16,9 @@ class Game extends Component {
          playerCount: 0,
          computerCount: 0,
          winLose: false,
-         isOver: false
+         isOver: false,
+         playerIcon: 'player',
+         computerIcon: 'computer'
       }
 
       this.players = [
@@ -25,7 +27,7 @@ class Game extends Component {
       this.game = {
          options: ['pancakes', 'hamburger', 'croissant', 'paella'],
          player: '',
-         computer: 0,
+         computer: '',
          moves: 0,
          playerScore: 0,
          computerScore: 0,
@@ -107,13 +109,16 @@ class Game extends Component {
          playerCount: this.game.playerScore,
          computerCount: this.game.computerScore,
          winLose: youWinLose,
-         isOver: finallyGame
+         isOver: finallyGame,
+         playerIcon: this.game.playerIcon,
+         computerIcon: this.game.computer
       })
    }
 
 
    clickHandler = (value) => {
       this.game.playerIcon = value
+      
       this.game.player = value;
       this.actionGame();
    }
@@ -131,8 +136,8 @@ class Game extends Component {
          <>
             <UserBar />
             <MatchBoard
-               playerIcon={this.game.player}
-               computerIcon={this.game.computer}
+               playerIcon={this.state.playerIcon}
+               computerIcon={this.state.computerIcon}
                playerScore={this.game.playerScore}
                computerScore={this.game.computerScore}
             />
@@ -142,9 +147,9 @@ class Game extends Component {
             {
                this.state.isOver ? <UiModal title={''}>
                   {
-                     this.state.winLose ? <p>Hai vinto</p> : <p>Hai perso</p>
+                     this.state.winLose ? <p className={'result_label'} style={{color: 'green'}}>You won!</p> : <p className={'result_label'} style={{color: 'red'}}>You lost :(</p>
                   }
-                  <p>Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
+                  <p className={'bg_label'} style={this.state.winLose ? {backgroundColor: 'green'} : {backgroundColor: 'red'}}>Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
                   <p>Vuoi fare parte della clasifica? </p>
                   <UiButton label={'Close'} callback={this.closeModal} />
                </UiModal> : ''
@@ -163,7 +168,9 @@ class Game extends Component {
          ...this.state,
          isOver: false,
          playerCount: 0,
-         computerCount: 0
+         computerCount: 0,
+         playerIcon: 'player',
+         computerIcon: 'computer'
       })
    }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const InfoIcon = ({ circleSize, icon, size, name, modal }) => {
+const InfoIcon = ({ circleSize, icon, size, modal }) => {
 
    const iconCallback = () => {
       modal();
@@ -19,7 +19,10 @@ const InfoIcon = ({ circleSize, icon, size, name, modal }) => {
          alignItems: 'center',
          marginLeft: '10px'
       }}>
-         <picture onClick={iconCallback}>
+         <picture onClick={iconCallback} style={{
+            display: 'flex',
+            alignItems: 'center'
+         }}>
             <img src={icon} alt="Icon" style={{
                width: size,
                height: size
@@ -43,12 +46,3 @@ InfoIcon.propTypes = {
 }
 
 export default InfoIcon;
-
-
-
-
-
-// {/* <source media="(min-width:650px)" srcSet={props.icon} />
-//                 <source media="(min-width:465px)" srcSet={props.icon} /> */}
-
-
