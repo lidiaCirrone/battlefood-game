@@ -30,10 +30,10 @@ class Game extends Component {
       this.game = {
          options: ['pancakes', 'hamburger', 'croissant', 'paella'],
          outcomes: [
-            [[0, 0], [1, 0], [0, 0], [0, 1]],
-            [[0, 1], [0, 0], [1, 0], [0, 0]],
-            [[0, 0], [0, 1], [0, 0], [1, 0]],
-            [[1, 0], [0, 0], [0, 1], [0, 0]]
+            [[0, 0, 'tie', 'tie'], [1, 0, 'win', 'lose'], [0, 0, 'tie', 'tie'], [0, 1, 'lose', 'win']],
+            [[0, 1, 'lose', 'win'], [0, 0, 'tie', 'tie'], [1, 0, 'win', 'lose'], [0, 0, 'tie', 'tie']],
+            [[0, 0, 'tie', 'tie'], [0, 1, 'lose', 'win'], [0, 0, 'tie', 'tie'], [1, 0, 'win', 'lose']],
+            [[1, 0, 'win', 'lose'], [0, 0, 'tie', 'tie'], [0, 1, 'lose', 'win'], [0, 0, 'tie', 'tie']]
          ],
          player: 0,
          computer: 0,
@@ -80,22 +80,9 @@ class Game extends Component {
       let playerIndex = this.game.player;
       let computerIndex = this.game.computer;
 
-      [this.game.playerMoveScore, this.game.computerMoveScore] = this.game.outcomes[playerIndex][computerIndex];
+      [this.game.playerMoveScore, this.game.computerMoveScore, this.game.playerResult, this.game.computerResult] = this.game.outcomes[playerIndex][computerIndex];
       this.game.playerScore += this.game.playerMoveScore;
       this.game.computerScore += this.game.computerMoveScore;
-
-      if (this.game.playerMoveScore === 1) {
-         this.game.playerResult = 'win';
-         this.game.computerResult = 'lose';
-      } else {
-         if (this.game.computerMoveScore === 1) {
-            this.game.playerResult = 'lose';
-            this.game.computerResult = 'win';
-         } else {
-            this.game.playerResult = 'tie';
-            this.game.computerResult = 'tie';
-         }
-      }
 
       let updatedPlayers = this.state.players;
 
