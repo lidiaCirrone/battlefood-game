@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// COMPONENTS
-import UiButton from '../uiButton/UiButton';
 
-// STYLES
 import './UiModal.css';
 
 
@@ -13,9 +10,9 @@ function UiModal(props) {
       <div className={'modal-container'}>
          <div className={props.cssClass}>
             {
-               props.title ? 
-               <h1 className={props.titleClass}>{props.title}</h1>
-               : ''
+               props.title ?
+                  <h1 className={props.titleClass}>{props.title}</h1>
+                  : ''
             }
             {props.children}
          </div>
@@ -30,7 +27,7 @@ UiModal.defaultProps = {
 
 UiModal.propTypes = {
    title: PropTypes.string.isRequired,
-   children: PropTypes.element
+   children: PropTypes.object
 }
 
 export default UiModal;

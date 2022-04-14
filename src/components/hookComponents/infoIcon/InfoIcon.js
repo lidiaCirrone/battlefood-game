@@ -40,7 +40,6 @@ InfoIcon.defaultProps = {
 }
 
 InfoIcon.propTypes = {
-   // icon: PropTypes.string.isRequired,
    size: PropTypes.number,
    circleSize: PropTypes.number
 }

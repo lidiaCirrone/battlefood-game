@@ -22,3 +22,4 @@ const IconBar = ({ getIcon }) => {
 }
 
 export default IconBar
+

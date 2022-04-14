@@ -7,7 +7,7 @@ import UiModal from '../uiModal/UiModal';
 import UiButton from '../uiButton/UiButton';
 import UiRuleIcon from '../uiRuleIcon/UiRuleIcon';
 
-import { pancakesIcon, hamburgerIcon, croissantIcon, paellaIcon, rulesIcon, trophyIcon } from '../../../utils/utils';
+import { pancakesIcon, hamburgerIcon, croissantIcon, paellaIcon, rulesIcon, trophyIcon, goldIcon, silverIcon, bronzeIcon } from '../../../utils/utils';
 
 
 const UserBar = (props) => {
@@ -47,10 +47,28 @@ const UserBar = (props) => {
 
    const playerData = JSON.parse(localStorage.getItem('players'));
 
+   if (playerData && playerData.length > 0) {
+
+      playerData.sort(function (a, b) {
+         return b.score - a.score;
+      });
+
+      if (playerData.length >= 3) {
+         playerData[0].icon = goldIcon;
+         playerData[1].icon = silverIcon;
+         playerData[2].icon = bronzeIcon;
+      }
+   }
+
+
    const renderPlayerData = (data, key) => {
       return (
          <li key={key} className={'player-item'}>
-            <span>{data.name}</span> <span>{data.score}</span>
+            <span>
+               {data.name}
+               {data.icon ? <UiRuleIcon icon={data.icon} /> : ''}
+            </span>
+            <span>{data.score}</span>
          </li>
       )
    }
@@ -59,7 +77,7 @@ const UserBar = (props) => {
       <>
 
          <div className="player_bar">
-            <p className={'username_label'}>{props.username != '' ? props.username : 'user'}</p>
+            <p className={'username_label'}>{props.username !== '' ? props.username : 'user'}</p>
             <div style={{ display: 'flex' }}>
                <InfoIcon modal={showRules} icon={rulesIcon} />
                <InfoIcon modal={showRanking} icon={trophyIcon} />
@@ -70,19 +88,16 @@ const UserBar = (props) => {
             state.openRules ? <UiModal title={'Rules'}>
                <ul>
                   <li>
-                     <UiRuleIcon icon={pancakesIcon} /> wins against <UiRuleIcon icon={hamburgerIcon} /> <UiRuleIcon icon={croissantIcon} />
+                     <UiRuleIcon icon={pancakesIcon} /> wins against <UiRuleIcon icon={hamburgerIcon} />
                   </li>
                   <li>
-                     <UiRuleIcon icon={hamburgerIcon} /> wins against <UiRuleIcon icon={croissantIcon} /> <UiRuleIcon icon={paellaIcon} />
+                     <UiRuleIcon icon={hamburgerIcon} /> wins against <UiRuleIcon icon={croissantIcon} />
                   </li>
                   <li>
-                     <UiRuleIcon icon={croissantIcon} /> wins against <UiRuleIcon icon={paellaIcon} /> <UiRuleIcon icon={pancakesIcon} />
+                     <UiRuleIcon icon={croissantIcon} /> wins against <UiRuleIcon icon={paellaIcon} />
                   </li>
                   <li>
-                     <UiRuleIcon icon={paellaIcon} /> wins against <UiRuleIcon icon={pancakesIcon} /> <UiRuleIcon icon={hamburgerIcon} />
-                  </li>
-                  <li>
-                     <UiRuleIcon icon={pancakesIcon} /> wins against <UiRuleIcon icon={hamburgerIcon} /> <UiRuleIcon icon={croissantIcon} />
+                     <UiRuleIcon icon={paellaIcon} /> wins against <UiRuleIcon icon={pancakesIcon} />
                   </li>
                </ul>
                <UiButton label={'Close'} callback={closeRules} />
@@ -91,12 +106,16 @@ const UserBar = (props) => {
 
          {
             state.openRanking ? <UiModal title={'Ranking'}>
-               <ul>
-                  <li className={'player-item darker'}>
-                     <span>Name</span> <span>Score</span>
-                  </li>
-                  {playerData.map(renderPlayerData)}
-               </ul>
+               {playerData ? (
+                  <ul>
+                     <li className={'player-item darker'}>
+                        <span>Name</span> <span>Score</span>
+                     </li>
+                     {playerData.map(renderPlayerData)}
+                  </ul>
+               )
+                  : 'No matches yet'
+               }
                <UiButton label={'Close'} callback={closeRanking} />
             </UiModal> : ''
          }

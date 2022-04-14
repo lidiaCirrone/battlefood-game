@@ -2,10 +2,10 @@ import React from 'react'
 
 import './MatchBoard.css'
 
-import UiGameIcon from '../uiGameIcon/UiGameIcon';
-import Score from '../score/Score';
+import UiGameIcon from '../uiGameIcon/UiGameIcon'
+import Score from '../score/Score'
 
-import {playerIcon, computerIcon}  from '../../../utils/utils';
+import { playerIcon, computerIcon } from '../../../utils/utils'
 
 
 const MatchBoard = (props) => {
@@ -22,10 +22,12 @@ const MatchBoard = (props) => {
             alignItems: 'center'
          }}>
             {
-               !props.computerIcon ? <UiGameIcon icon={computerIcon} size={100} circleSize={180} />
-                  : <UiGameIcon icon={require(`../../../assets/icons/${props.computerIcon}.png`)} size={100} circleSize={180} />
+               !props.computerIcon ?
+                  <UiGameIcon icon={computerIcon} size={100} circleSize={180} />
+                  :
+                  <UiGameIcon icon={require(`../../../assets/icons/${props.computerIcon}.png`)} size={100} circleSize={180} />
             }
-            <Score score={props.computerScore} name={'Computer'} />
+            <Score score={props.computerScore} name={'Computer'} class={props.computerResult} />
          </div>
 
          <hr style={{
@@ -42,8 +44,10 @@ const MatchBoard = (props) => {
          }}>
             <Score score={props.playerScore} name={'Player'} class={props.playerResult} />
             {
-               !props.playerIcon ? <UiGameIcon icon={playerIcon} size={100} circleSize={180} />
-                  : <UiGameIcon icon={require(`../../../assets/icons/${props.playerIcon}.png`)} size={100} circleSize={180} />
+               !props.playerIcon ?
+                  <UiGameIcon icon={playerIcon} size={100} circleSize={180} />
+                  :
+                  <UiGameIcon icon={require(`../../../assets/icons/${props.playerIcon}.png`)} size={100} circleSize={180} />
             }
          </div>
 

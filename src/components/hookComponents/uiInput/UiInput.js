@@ -2,23 +2,25 @@ import React from 'react'
 
 import './UiInput.css';
 
-
 const UiInput = (props) => {
 
-   const inputHandler = (e) => {
-      props.callback(e.target.value);
-   }
+    const inputHandler = (e) => {
+        props.callback(e.target.value);
+    }
 
-
-    return(
+    return (
         <>
-            <input type={props.type} className={props.class} placeholder={props.placeholder} onChange={inputHandler}/>
+            <input
+                type={props.type}
+                className={props.class}
+                placeholder={props.placeholder}
+                onChange={inputHandler} />
         </>
     )
 }
 
 UiInput.defaultProps = {
-   type: 'text'
+    type: 'text'
 }
 
 export default UiInput

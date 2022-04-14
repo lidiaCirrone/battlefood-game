@@ -8,3 +8,7 @@ export const trophyIcon = require('../assets/icons/trophy.png');
 
 export const playerIcon = require('../assets/icons/player.png');
 export const computerIcon = require('../assets/icons/computer.png');
+
+export const goldIcon = require('../assets/icons/gold.png');
+export const silverIcon = require('../assets/icons/silver.png');
+export const bronzeIcon = require('../assets/icons/bronze.png');

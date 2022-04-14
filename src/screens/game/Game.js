@@ -26,6 +26,7 @@ class Game extends Component {
 
       this.players = JSON.parse(localStorage.getItem('players')) ? JSON.parse(localStorage.getItem('players')) : [];
 
+      //ARRAY DELLE VARIABILI GLOBALI
       this.game = {
          options: ['pancakes', 'hamburger', 'croissant', 'paella'],
          outcomes: [
@@ -41,19 +42,14 @@ class Game extends Component {
          playerMoveScore: 0,
          computerMoveScore: 0,
          playerResult: '',
+         computerResult: '',
          playerIcon: '',
          computerIcon: ''
       }
    }
 
-   componentDidMount() {
 
-   }
-
-   componentDidUpdate() {
-
-   }
-
+   // GENERA UN NUMERO RANDOM PER POTER ASEGNARE LA SCELTA DI COMPUTER
    randomAction() {
 
       this.game.computer = Math.floor(Math.random() * this.game.options.length);
@@ -61,11 +57,11 @@ class Game extends Component {
       var lastRandom;
       var random;
       if (lastRandom === undefined) {
-         random = Math.floor(Math.random() * (this.game.options.length - 1 + 1));
+         random = Math.floor(Math.random() * (this.game.options.length));
       }
       else {
-         random = Math.floor(Math.random() * (this.game.options.length - 1));
-         if (random >= lastRandom) random += 1;
+         random = Math.floor(Math.random() * (this.game.options.length));
+         if (random >= lastRandom) Math.floor(Math.random() * this.game.options.length);
       }
       lastRandom = random;
 
@@ -73,6 +69,7 @@ class Game extends Component {
       this.game.computerIcon = this.game.options[lastRandom];
    }
 
+   // AZIONE DEL GIOCO, A SECONDA DEL RISULTATO ASSEGNA I PUNTI, AGGIORNAMENTO DELLO STATO DEL GIOCO
    actionGame() {
 
       let youWinLose;
@@ -89,17 +86,20 @@ class Game extends Component {
 
       if (this.game.playerMoveScore === 1) {
          this.game.playerResult = 'win';
+         this.game.computerResult = 'lose';
       } else {
          if (this.game.computerMoveScore === 1) {
             this.game.playerResult = 'lose';
+            this.game.computerResult = 'win';
          } else {
             this.game.playerResult = 'tie';
+            this.game.computerResult = 'tie';
          }
       }
 
       let updatedPlayers = this.state.players;
 
-      let filteredArray = updatedPlayers.filter(user => user.name.toLowerCase() == this.state.currentUsername.toLowerCase());
+      let filteredArray = updatedPlayers.filter(user => user.name.toLowerCase() === this.state.currentUsername.toLowerCase());
       let currentPlayer = filteredArray[0];
       let currentPlayerIndex = updatedPlayers.indexOf(currentPlayer);
 
@@ -112,8 +112,8 @@ class Game extends Component {
       }
 
       updatedPlayers[currentPlayerIndex] = currentPlayer;
-      
-      if (this.state.currentUsername != '') {
+
+      if (this.state.currentUsername !== '') {
          localStorage.setItem('players', JSON.stringify(updatedPlayers));
       }
 
@@ -130,24 +130,20 @@ class Game extends Component {
    }
 
 
+   //PRENDE VALORE DEL USER
    clickHandler = (value) => {
       this.game.playerIcon = value
       this.game.player = this.game.options.indexOf(value);
       this.actionGame();
    }
 
+   //SETTA USER NAME
    submitUsername = (value) => {
-      console.log(value);
       this.setState({
          ...this.state,
          currentUsername: value
       })
    }
-
-   componentWillUnmount() {
-
-   }
-
 
    render() {
 
@@ -160,23 +156,26 @@ class Game extends Component {
                playerScore={this.game.playerScore}
                computerScore={this.game.computerScore}
                playerResult={this.game.playerResult}
+               computerResult={this.game.computerResult}
             />
             <IconBar getIcon={this.clickHandler} />
 
 
             {
                this.state.isOver ? <UiModal title={''}>
-                  {
-                     this.state.winLose ?
-                        <p className={'result_label'} style={{ color: 'green' }}>You won!</p>
-                        :
-                        <p className={'result_label'} style={{ color: 'red' }}>You lost :(</p>
-                  }
-                  <p
-                     className={'bg_label'}
-                     style={this.state.winLose ? { backgroundColor: 'green' } : { backgroundColor: 'red' }}
-                  >Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
-                  <UiButton label={'Close'} callback={this.closeModal} />
+                  <>
+                     {
+                        this.state.winLose ?
+                           <p className={'result_label'} style={{ color: 'green' }}>You won!</p>
+                           :
+                           <p className={'result_label'} style={{ color: 'red' }}>You lost!</p>
+                     }
+
+                     <p className={'bg_label'}
+                        style={this.state.winLose ? { backgroundColor: 'green' } : { backgroundColor: 'red' }}
+                     >Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
+                     <UiButton label={'Close'} callback={this.closeRankingModal} />
+                  </>
                </UiModal>
                   : ''
             }
@@ -184,9 +183,18 @@ class Game extends Component {
             {
                this.state.registrationModal ?
                   <UiModal title={'User'} titleClass={'user_heading'}>
-                     <p>Insert here a name if you want to get into the leaderboard</p>
-                     <UiInput placeholder={'Username...'} class={'username_input'} callback={this.submitUsername} />
-                     <UiButton label={'Close'} callback={this.closeUsernameModal} />
+                     <>
+                        <p>Insert here a name if you want to get into the leaderboard, or your previous name if you have already played</p>
+                        <UiInput
+                           placeholder={'Username...'}
+                           class={'username_input'}
+                           callback={this.submitUsername}
+                        />
+                        <UiButton
+                           label={'Close'}
+                           callback={this.closeUsernameModal}
+                        />
+                     </>
                   </UiModal>
                   : ''
             }
@@ -195,11 +203,13 @@ class Game extends Component {
       )
    }
 
-   closeModal = () => {
+   //CHIUDE MODALE DELL CLASSIFICA
+   closeRankingModal = () => {
 
       this.game.playerScore = 0
       this.game.computerScore = 0
       this.game.playerResult = '';
+      this.game.computerResult = '';
 
       this.setState({
          ...this.state,
@@ -208,30 +218,30 @@ class Game extends Component {
          computerCount: 0,
          playerIcon: 'player',
          computerIcon: 'computer',
-         playerResult: ''
+         playerResult: '',
+         computerResult: ''
       })
    }
 
+   //CHIUDE MODALE INIZIALE CON USERNAME E MANDA I DATI DEL USER SE SONO PRESENTI
    closeUsernameModal = () => {
 
       let newPlayers = this.players;
 
-      let filteredArray = this.players.filter(user => user.name.toLowerCase() == this.state.currentUsername.toLowerCase());
+      let filteredArray = this.players.filter(user => user.name.toLowerCase() === this.state.currentUsername.toLowerCase());
 
-      if (filteredArray.length == 0) {
-         console.log('non c\'è ancora');
+      if (filteredArray.length === 0) {
          newPlayers = this.players.concat([
             {
                name: this.state.currentUsername,
                score: 0
             }
          ])
-         console.log('nuovi giocatori:', newPlayers);
       }
 
       this.players = newPlayers;
 
-      if (this.state.currentUsername != '') {
+      if (this.state.currentUsername !== '') {
          localStorage.setItem('players', JSON.stringify(newPlayers));
       }
 

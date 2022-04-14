@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const UiGameIcon = ({ circleSize, icon, size, name, getIcon, modal }) => {
+const UiGameIcon = ({ circleSize, icon, size, name, getIcon }) => {
 
    const iconCallback = () => {
       getIcon(name);

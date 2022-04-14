@@ -1,5 +1,5 @@
-import React from 'react';
-import './Score.css';
+import React from 'react'
+import './Score.css'
 
 const Score = (props) => {
    return (
