@@ -2,7 +2,7 @@ body {
    background: rgb(255,248,202,0.3);
 }
 
-body, button {
+body, button, input {
    font-family: 'Paytone One', sans-serif;
    font-size: 14px;
 }

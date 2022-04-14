@@ -45,11 +45,21 @@ const UserBar = (props) => {
       })
    }
 
+   const playerData = JSON.parse(localStorage.getItem('players'));
+
+   const renderPlayerData = (data, key) => {
+      return (
+         <li key={key} className={'player-item'}>
+            <span>{data.name}</span> <span>{data.score}</span>
+         </li>
+      )
+   }
+
    return (
       <>
 
          <div className="player_bar">
-            <p className={'username_label'}>username</p>
+            <p className={'username_label'}>{props.username}</p>
             <div style={{ display: 'flex' }}>
                <InfoIcon modal={showRules} icon={rulesIcon} />
                <InfoIcon modal={showRanking} icon={trophyIcon} />
@@ -80,8 +90,13 @@ const UserBar = (props) => {
          }
 
          {
-            state.openRanking ? <UiModal title={''}>
-               <p>map delle partite in classifica</p>
+            state.openRanking ? <UiModal title={'Ranking'}>
+               <ul>
+                  <li className={'player-item darker'}>
+                     <span>Name</span> <span>Score</span>
+                  </li>
+                  {playerData.map(renderPlayerData)}
+               </ul>
                <UiButton label={'Close'} callback={closeRanking} />
             </UiModal> : ''
          }

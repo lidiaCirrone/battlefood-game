@@ -13,17 +13,18 @@ class Game extends Component {
       super(props);
 
       this.state = {
+         username: 'user',
+         currentUsername: '',
          playerCount: 0,
          computerCount: 0,
          winLose: false,
          isOver: false,
+         registrationModal: true,
          playerIcon: 'player',
          computerIcon: 'computer'
       }
 
-      this.players = [
-         { name: '', win: 0, lose: 0, }
-      ]
+      this.players = JSON.parse(localStorage.getItem('players')) ? JSON.parse(localStorage.getItem('players')) : [];
 
       this.game = {
          options: ['pancakes', 'hamburger', 'croissant', 'paella'],
@@ -85,15 +86,26 @@ class Game extends Component {
       this.game.playerScore += this.game.playerMoveScore;
       this.game.computerScore += this.game.computerMoveScore;
 
+      let updatedPlayers = this.state.players;
+
+      let filteredArray = updatedPlayers.filter(user => user.name.toLowerCase() == this.state.currentUsername.toLowerCase());
+      let currentPlayer = filteredArray[0];
+      let currentPlayerIndex = updatedPlayers.indexOf(currentPlayer);
+      
       if (this.game.playerScore === 2 || this.game.playerScore === 3) {
          youWinLose = true
          finallyGame = true
+         currentPlayer.score += 1;
       } else if (this.game.computerScore === 2 || this.game.computerScore === 3) {
          finallyGame = true
       }
 
+      updatedPlayers[currentPlayerIndex] = currentPlayer;
+      localStorage.setItem('players', JSON.stringify(updatedPlayers));
+
       this.setState({
          ...this.state,
+         players: updatedPlayers,
          playerCount: this.game.playerScore,
          computerCount: this.game.computerScore,
          winLose: youWinLose,
@@ -110,6 +122,14 @@ class Game extends Component {
       this.actionGame();
    }
 
+   submitUsername = (value) => {
+      console.log(value);
+      this.setState({
+         ...this.state,
+         currentUsername: value
+      })
+   }
+
    componentWillUnmount() {
 
    }
@@ -117,11 +137,9 @@ class Game extends Component {
 
    render() {
 
-      // console.log(this.state.isOver)
-
       return (
          <>
-            <UserBar />
+            <UserBar username={this.state.username} />
             <MatchBoard
                playerIcon={this.state.playerIcon}
                computerIcon={this.state.computerIcon}
@@ -134,12 +152,28 @@ class Game extends Component {
             {
                this.state.isOver ? <UiModal title={''}>
                   {
-                     this.state.winLose ? <p className={'result_label'} style={{ color: 'green' }}>You won!</p> : <p className={'result_label'} style={{ color: 'red' }}>You lost :(</p>
+                     this.state.winLose ?
+                      <p className={'result_label'} style={{ color: 'green' }}>You won!</p> 
+                      :
+                       <p className={'result_label'} style={{ color: 'red' }}>You lost :(</p>
                   }
-                  <p className={'bg_label'} style={this.state.winLose ? { backgroundColor: 'green' } : { backgroundColor: 'red' }}>Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
-                  <p>Vuoi fare parte della clasifica? </p>
+                  <p
+                   className={'bg_label'} 
+                   style={this.state.winLose ? { backgroundColor: 'green' } : { backgroundColor: 'red' }}
+                   >Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
                   <UiButton label={'Close'} callback={this.closeModal} />
-               </UiModal> : ''
+               </UiModal>
+                : ''
+            }
+
+            {
+               this.state.registrationModal ? 
+               <UiModal title={'User'} titleClass={'user_heading'}>
+                  <p>Insert here a name if you want to get into the leaderboard</p>
+                  <UiInput placeholder={'Username...'} class={'username_input'} callback={this.submitUsername} />
+                  <UiButton label={'Close'} callback={this.closeUsernameModal} />
+               </UiModal> 
+               :  ''
             }
 
          </>
@@ -158,6 +192,35 @@ class Game extends Component {
          computerCount: 0,
          playerIcon: 'player',
          computerIcon: 'computer'
+      })
+   }
+
+   closeUsernameModal = () => {
+
+      let newPlayers = this.players;
+
+      let filteredArray = this.players.filter(user => user.name.toLowerCase() == this.state.currentUsername.toLowerCase());
+
+      if (filteredArray.length == 0) {
+         console.log('non c\'è ancora');
+         newPlayers = this.players.concat([
+            {
+               name: this.state.currentUsername,
+               score: 0
+            }
+         ])
+      console.log('nuovi giocatori:', newPlayers);
+      }
+
+      this.players = newPlayers;
+
+      localStorage.setItem('players', JSON.stringify(newPlayers));
+
+      this.setState({
+         ...this.state,
+         players: newPlayers,
+         registrationModal: false,
+         username: this.state.currentUsername
       })
    }
 

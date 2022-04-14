@@ -46,6 +46,14 @@
    margin: 0 5px;
 }
 
+.modal-content h1 {
+   text-transform: uppercase;
+}
+
+.modal-content .user_heading {
+   color: #39bdff;
+}
+
 .modal-content button, .bg_label {
    background-color: #333;
     color: white;
