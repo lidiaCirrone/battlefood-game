@@ -24,13 +24,21 @@ class Game extends Component {
       this.players = [
          { name: '', win: 0, lose: 0, }
       ]
+
       this.game = {
          options: ['pancakes', 'hamburger', 'croissant', 'paella'],
-         player: '',
-         computer: '',
-         moves: 0,
+         outcomes: [
+            [[0, 0], [1, 0], [0, 0], [0, 1]],
+            [[0, 1], [0, 0], [1, 0], [0, 0]],
+            [[0, 0], [0, 1], [0, 0], [1, 0]],
+            [[1, 0], [0, 0], [0, 1], [0, 0]]
+         ],
+         player: 0,
+         computer: 0,
          playerScore: 0,
          computerScore: 0,
+         playerMoveScore: 0,
+         computerMoveScore: 0,
          playerIcon: '',
          computerIcon: ''
       }
@@ -59,8 +67,8 @@ class Game extends Component {
       }
       lastRandom = random;
 
-      this.game.computer = this.game.options[lastRandom];
-      console.log('pc', this.game.computer);
+      this.game.computer = lastRandom;
+      this.game.computerIcon = this.game.options[lastRandom];
    }
 
    actionGame() {
@@ -70,38 +78,18 @@ class Game extends Component {
 
       this.randomAction()
 
-      console.log('player', this.game.player);
+      let playerIndex = this.game.player;
+      let computerIndex = this.game.computer;
 
-      if (this.game.computer === this.game.player) {
-      } else if (
-         (this.game.player === 'pancakes' && this.game.computer === 'hamburger') ||
-         (this.game.player === 'pancakes' && this.game.computer === 'croissant') ||
-         (this.game.player === 'hamburger' && this.game.computer === 'croissant') ||
-         (this.game.player === 'hamburger' && this.game.computer === 'paella') ||
-         (this.game.player === 'croissant' && this.game.computer === 'paella') ||
-         (this.game.player === 'croissant' && this.game.computer === 'pancakes') ||
-         (this.game.player === 'paella' && this.game.computer === 'pancakes') ||
-         (this.game.player === 'paella' && this.game.computer === 'hamburger') ||
-         (this.game.player === 'pancakes' && this.game.computer === 'hamburger') ||
-         (this.game.player === 'pancakes' && this.game.computer === 'croissant')) {
-         ++this.game.playerScore;
-      } else {
-         ++this.game.computerScore;
-      }
+      [this.game.playerMoveScore, this.game.computerMoveScore] = this.game.outcomes[playerIndex][computerIndex];
+      this.game.playerScore += this.game.playerMoveScore;
+      this.game.computerScore += this.game.computerMoveScore;
 
       if (this.game.playerScore === 2 || this.game.playerScore === 3) {
-
          youWinLose = true
          finallyGame = true
-         // this.game.playerScore = 0
-         // this.game.computerScore = 0
-
       } else if (this.game.computerScore === 2 || this.game.computerScore === 3) {
-
          finallyGame = true
-         // this.game.computerScore = 0
-         // this.game.playerScore = 0
-
       }
 
       this.setState({
@@ -111,15 +99,14 @@ class Game extends Component {
          winLose: youWinLose,
          isOver: finallyGame,
          playerIcon: this.game.playerIcon,
-         computerIcon: this.game.computer
+         computerIcon: this.game.computerIcon
       })
    }
 
 
    clickHandler = (value) => {
       this.game.playerIcon = value
-      
-      this.game.player = value;
+      this.game.player = this.game.options.indexOf(value);
       this.actionGame();
    }
 
@@ -130,7 +117,7 @@ class Game extends Component {
 
    render() {
 
-      console.log(this.state.isOver)
+      // console.log(this.state.isOver)
 
       return (
          <>
@@ -147,9 +134,9 @@ class Game extends Component {
             {
                this.state.isOver ? <UiModal title={''}>
                   {
-                     this.state.winLose ? <p className={'result_label'} style={{color: 'green'}}>You won!</p> : <p className={'result_label'} style={{color: 'red'}}>You lost :(</p>
+                     this.state.winLose ? <p className={'result_label'} style={{ color: 'green' }}>You won!</p> : <p className={'result_label'} style={{ color: 'red' }}>You lost :(</p>
                   }
-                  <p className={'bg_label'} style={this.state.winLose ? {backgroundColor: 'green'} : {backgroundColor: 'red'}}>Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
+                  <p className={'bg_label'} style={this.state.winLose ? { backgroundColor: 'green' } : { backgroundColor: 'red' }}>Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
                   <p>Vuoi fare parte della clasifica? </p>
                   <UiButton label={'Close'} callback={this.closeModal} />
                </UiModal> : ''

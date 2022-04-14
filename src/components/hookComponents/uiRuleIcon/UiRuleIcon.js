@@ -22,7 +22,7 @@ UiRuleIcon.defaultProps = {
 }
 
 UiRuleIcon.propTypes = {
-   src: PropTypes.string.isRequired,
+   icon: PropTypes.string.isRequired,
    size: PropTypes.number
 }
 
