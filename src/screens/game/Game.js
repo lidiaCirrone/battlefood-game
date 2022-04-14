@@ -87,7 +87,7 @@ class Game extends Component {
       this.game.playerScore += this.game.playerMoveScore;
       this.game.computerScore += this.game.computerMoveScore;
 
-      if (this.game.playerMoveScore === 1){
+      if (this.game.playerMoveScore === 1) {
          this.game.playerResult = 'win';
       } else {
          if (this.game.computerMoveScore === 1) {
@@ -102,7 +102,7 @@ class Game extends Component {
       let filteredArray = updatedPlayers.filter(user => user.name.toLowerCase() == this.state.currentUsername.toLowerCase());
       let currentPlayer = filteredArray[0];
       let currentPlayerIndex = updatedPlayers.indexOf(currentPlayer);
-      
+
       if (this.game.playerScore === 2 || this.game.playerScore === 3) {
          youWinLose = true
          finallyGame = true
@@ -112,7 +112,10 @@ class Game extends Component {
       }
 
       updatedPlayers[currentPlayerIndex] = currentPlayer;
-      localStorage.setItem('players', JSON.stringify(updatedPlayers));
+      
+      if (this.state.currentUsername != '') {
+         localStorage.setItem('players', JSON.stringify(updatedPlayers));
+      }
 
       this.setState({
          ...this.state,
@@ -165,27 +168,27 @@ class Game extends Component {
                this.state.isOver ? <UiModal title={''}>
                   {
                      this.state.winLose ?
-                      <p className={'result_label'} style={{ color: 'green' }}>You won!</p> 
-                      :
-                       <p className={'result_label'} style={{ color: 'red' }}>You lost :(</p>
+                        <p className={'result_label'} style={{ color: 'green' }}>You won!</p>
+                        :
+                        <p className={'result_label'} style={{ color: 'red' }}>You lost :(</p>
                   }
                   <p
-                   className={'bg_label'} 
-                   style={this.state.winLose ? { backgroundColor: 'green' } : { backgroundColor: 'red' }}
-                   >Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
+                     className={'bg_label'}
+                     style={this.state.winLose ? { backgroundColor: 'green' } : { backgroundColor: 'red' }}
+                  >Player: {this.state.playerCount} - Computer: {this.state.computerCount}</p>
                   <UiButton label={'Close'} callback={this.closeModal} />
                </UiModal>
-                : ''
+                  : ''
             }
 
             {
-               this.state.registrationModal ? 
-               <UiModal title={'User'} titleClass={'user_heading'}>
-                  <p>Insert here a name if you want to get into the leaderboard</p>
-                  <UiInput placeholder={'Username...'} class={'username_input'} callback={this.submitUsername} />
-                  <UiButton label={'Close'} callback={this.closeUsernameModal} />
-               </UiModal> 
-               :  ''
+               this.state.registrationModal ?
+                  <UiModal title={'User'} titleClass={'user_heading'}>
+                     <p>Insert here a name if you want to get into the leaderboard</p>
+                     <UiInput placeholder={'Username...'} class={'username_input'} callback={this.submitUsername} />
+                     <UiButton label={'Close'} callback={this.closeUsernameModal} />
+                  </UiModal>
+                  : ''
             }
 
          </>
@@ -204,7 +207,8 @@ class Game extends Component {
          playerCount: 0,
          computerCount: 0,
          playerIcon: 'player',
-         computerIcon: 'computer'
+         computerIcon: 'computer',
+         playerResult: ''
       })
    }
 
@@ -222,12 +226,14 @@ class Game extends Component {
                score: 0
             }
          ])
-      console.log('nuovi giocatori:', newPlayers);
+         console.log('nuovi giocatori:', newPlayers);
       }
 
       this.players = newPlayers;
 
-      localStorage.setItem('players', JSON.stringify(newPlayers));
+      if (this.state.currentUsername != '') {
+         localStorage.setItem('players', JSON.stringify(newPlayers));
+      }
 
       this.setState({
          ...this.state,

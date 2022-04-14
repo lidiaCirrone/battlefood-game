@@ -59,7 +59,7 @@ const UserBar = (props) => {
       <>
 
          <div className="player_bar">
-            <p className={'username_label'}>{props.username}</p>
+            <p className={'username_label'}>{props.username != '' ? props.username : 'user'}</p>
             <div style={{ display: 'flex' }}>
                <InfoIcon modal={showRules} icon={rulesIcon} />
                <InfoIcon modal={showRanking} icon={trophyIcon} />
