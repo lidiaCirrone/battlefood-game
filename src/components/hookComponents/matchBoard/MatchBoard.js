@@ -40,7 +40,7 @@ const MatchBoard = (props) => {
             justifyContent: 'center',
             alignItems: 'center'
          }}>
-            <Score score={props.playerScore} name={'Player'} />
+            <Score score={props.playerScore} name={'Player'} class={props.playerResult} />
             {
                !props.playerIcon ? <UiGameIcon icon={playerIcon} size={100} circleSize={180} />
                   : <UiGameIcon icon={require(`../../../assets/icons/${props.playerIcon}.png`)} size={100} circleSize={180} />

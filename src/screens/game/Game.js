@@ -40,6 +40,7 @@ class Game extends Component {
          computerScore: 0,
          playerMoveScore: 0,
          computerMoveScore: 0,
+         playerResult: '',
          playerIcon: '',
          computerIcon: ''
       }
@@ -85,6 +86,16 @@ class Game extends Component {
       [this.game.playerMoveScore, this.game.computerMoveScore] = this.game.outcomes[playerIndex][computerIndex];
       this.game.playerScore += this.game.playerMoveScore;
       this.game.computerScore += this.game.computerMoveScore;
+
+      if (this.game.playerMoveScore === 1){
+         this.game.playerResult = 'win';
+      } else {
+         if (this.game.computerMoveScore === 1) {
+            this.game.playerResult = 'lose';
+         } else {
+            this.game.playerResult = 'tie';
+         }
+      }
 
       let updatedPlayers = this.state.players;
 
@@ -145,6 +156,7 @@ class Game extends Component {
                computerIcon={this.state.computerIcon}
                playerScore={this.game.playerScore}
                computerScore={this.game.computerScore}
+               playerResult={this.game.playerResult}
             />
             <IconBar getIcon={this.clickHandler} />
 
@@ -184,6 +196,7 @@ class Game extends Component {
 
       this.game.playerScore = 0
       this.game.computerScore = 0
+      this.game.playerResult = '';
 
       this.setState({
          ...this.state,
